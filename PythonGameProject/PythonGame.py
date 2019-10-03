@@ -13,38 +13,19 @@ yvel = 0
 xacc = 0
 yacc = 2
 
-animatingRight = False
-animatingLeft = False
-lastFacingRight = False
-LastFacingLeft = False
-h = 0
 # Function that creates a window or screen, return type: Surface
 
 gameDisplay = pygame.display.set_mode((800, 600))
 
 pygame.display.set_caption('My Boy')
 
-runningRight = []
-
 boy1 = pygame.image.load('TheBoyStandingRight.png').convert_alpha()
 
 index = boy1
 
-runningRight.append(boy1)
 
-# boy2 = pygame.image.load('blacksquare.gif')
-
-# runningRight.append(boy2)
-
-bg = pygame.image.load('background.jpg')
-
-
-def player(image, x, y):
+def render(image, x, y):
     gameDisplay.blit(image, (x, y))
-
-
-def backGround(x, y):
-    gameDisplay.blit(bg, (x, y))
 
 
 # Creating a clock object that tracks time
@@ -86,12 +67,10 @@ while not dead:
             animatingRight = False
 
             if event.key == pygame.K_RIGHT:
-                lastFacingRight = True
                 if event.type == pygame.KEYDOWN and event.key != pygame.K_LEFT:
                     xacc = 0
                     xvel = 0
             if event.key == pygame.K_LEFT:
-                lastFacingLeft = True
                 if event.type == pygame.KEYDOWN and event.key != pygame.K_RIGHT:
                     xacc = 0
                     xvel = 0
@@ -130,22 +109,16 @@ while not dead:
     if y >= 600 - 79:
         y = 600 - 79
 
+    # ------Render Here------
     # always render from back to front (background first)
 
     pygame.draw.rect(gameDisplay, (0, 0, 0), (0, 0, 800, 600))
 
     pygame.draw.rect(gameDisplay, (255, 0, 0, 255), (0, 500, 800, 100))
 
-    player(index, x, y)
+    render(index, x, y)
 
-    # if animatingRight == True:
-    # for z in runningRight:
-    # if h != len(runningRight):
-    # h+=1
-    # if h == len(runningRight):
-    # h=0
-    # player(runningRight[h],x,y)
-    ##clear function*** runningRight[h-1]
+    # -----------------------
 
     pygame.display.flip()
 
