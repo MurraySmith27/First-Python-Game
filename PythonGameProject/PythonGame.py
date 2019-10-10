@@ -19,7 +19,7 @@ gameDisplay = pygame.display.set_mode((800, 600))
 
 pygame.display.set_caption('My Boy')
 
-boy1 = pygame.image.load('TheBoyStandingRight.png').convert_alpha()
+boy1 = pygame.image.load('boy_stand_right.png').convert_alpha()
 
 index = boy1
 
