@@ -1,4 +1,6 @@
 import pygame
+import csv
+import math
 
 pygame.init()  # Function that initiates all imported pygame modules (basically makes pygame work)
 
@@ -19,12 +21,40 @@ gameDisplay = pygame.display.set_mode((800, 600))
 
 pygame.display.set_caption('My Boy')
 
-boy1 = pygame.image.load('boy_stand_right.png').convert_alpha()
+boy1 = pygame.image.load('assets/boy_stand_right.png').convert_alpha()
 
 index = boy1
 
+# Returns image of map
+#TODO return struct of rectangles for collision
+def MakeMap(map_csv_name, map_spritsheet_name, tile_size, tiles_per_row):
+    csv_file = open(map_csv_name, "r")
+    map = csv.reader(csv_file)
+    map = [row for row in map]
+    csv_file.close()
+    map_size_tiles = (len(map[0]), len(map))
+    map_size_pixels = (map_size_tiles[0] * tile_size, map_size_tiles[1] * tile_size)
+
+    map_image = pygame.Surface([map_size_pixels[0], map_size_pixels[1]]).convert()
+
+    map_spritesheet = pygame.image.load(map_spritsheet_name).convert_alpha()
+    for map_tile_y in range(0, map_size_tiles[1]):
+        for map_tile_x in range(0, map_size_tiles[0]):
+            tile_id = int(map[map_tile_y][map_tile_x])
+            map_pixel_pos = (map_tile_x*tile_size, map_tile_y*tile_size)
+            if tile_id < 0:
+                continue
+            spr_x = tile_size * (tile_id % tiles_per_row)
+            spr_y = tile_size * math.floor(tile_id / tiles_per_row)
+            map_image.blit(map_spritesheet, map_pixel_pos, (spr_x, spr_y, 70, 70))
+    map_image = pygame.transform.scale(map_image, (800, 600))
+
+    return map_image
+
+map_image = MakeMap("assets/maps/map1.csv", "assets/platformer-extendedtiles-0/PNG Grass/Spritesheet/sheet.png", 70, 7)
 
 def render(image, x, y):
+    # Render player
     gameDisplay.blit(image, (x, y))
 
 
@@ -112,7 +142,9 @@ while not dead:
     # ------Render Here------
     # always render from back to front (background first)
 
-    pygame.draw.rect(gameDisplay, (0, 0, 0), (0, 0, 800, 600))
+    pygame.draw.rect(gameDisplay, (0, 255, 0), (0, 0, 800, 600))
+
+    render(map_image, 0, 0)
 
     pygame.draw.rect(gameDisplay, (255, 0, 0, 255), (0, 500, 800, 100))
 
