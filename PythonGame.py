@@ -54,7 +54,6 @@ map_image = MakeMap("assets/maps/map1.csv", "assets/platformer-extendedtiles-0/P
 map_image = pygame.transform.scale(map_image, (800, 600))
 
 def render(image, x, y):
-    # Render player
     gameDisplay.blit(image, (x, y))
 
 
