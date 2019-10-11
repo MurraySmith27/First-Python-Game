@@ -46,12 +46,12 @@ def MakeMap(map_csv_name, map_spritsheet_name, tile_size, tiles_per_row):
                 continue
             spr_x = tile_size * (tile_id % tiles_per_row)
             spr_y = tile_size * math.floor(tile_id / tiles_per_row)
-            map_image.blit(map_spritesheet, map_pixel_pos, (spr_x, spr_y, 70, 70))
-    map_image = pygame.transform.scale(map_image, (800, 600))
+            map_image.blit(map_spritesheet, map_pixel_pos, (spr_x, spr_y, tile_size, tile_size))
 
     return map_image
 
 map_image = MakeMap("assets/maps/map1.csv", "assets/platformer-extendedtiles-0/PNG Grass/Spritesheet/sheet.png", 70, 7)
+map_image = pygame.transform.scale(map_image, (800, 600))
 
 def render(image, x, y):
     # Render player
