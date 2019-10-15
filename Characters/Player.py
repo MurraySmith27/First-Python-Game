@@ -9,16 +9,16 @@ class Player(Character):
     _speed: float
     _x: int
     _y: int
-
+    _width: int = 60
+    _height: int = 80
     def __init__(self, speed: float, x: int = 0,  y: int = 0):
-        self._image_index = pygame.\
-            image.load("images/boy_stand_right.png").convert_alpha()
+        self._image_index = pygame.image.load("images/boy_stand_right.png").convert_alpha()
 
         self._speed = speed
         self._x = x
         self._y = y
 
-    def display(self, game_display):
+    def displayPlayer(self, game_display):
         game_display.blit(self._image_index, (self._x, self._y))
 
     def move(self, keys_pressed: Dict[int, bool]):
@@ -35,3 +35,12 @@ class Player(Character):
 
         self._x += x_inc
         self._y += y_inc
+
+    def getX(self):
+        return self._x
+    def getY(self):
+        return self._y
+    def getWidth(self):
+        return self._width
+    def getHeight(self):
+        return self._height
