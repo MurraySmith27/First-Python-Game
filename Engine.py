@@ -1,5 +1,8 @@
 import pygame
 from Characters.Player import Player
+from Characters.RedSquare import RedSquare
+import Collision
+
 
 dead: bool
 boy: Player
@@ -11,6 +14,8 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
 
     boy = Player(10, 0, 0)
+    RS = RedSquare(0, 500)
+
     key_pressed = {pygame.K_UP: False, pygame.K_DOWN: False,
                    pygame.K_RIGHT: False, pygame.K_LEFT: False}
 
@@ -32,8 +37,9 @@ if __name__ == "__main__":
 
         boy.move(key_pressed)
         pygame.draw.rect(display, (0, 0, 0), (0, 0, 800, 600))
-        pygame.draw.rect(display, (255, 0, 0, 255), (0, 500, 800, 100))
-        boy.display(display)
+        RS.displayRS(display)
+        boy.displayPlayer(display)
+        print(Collision.checkOverlap(boy, RS))
         clock.tick(60)
         pygame.display.flip()
     pygame.quit()
