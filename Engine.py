@@ -9,12 +9,13 @@ boy: Player
 move_boy: bool
 if __name__ == "__main__":
     pygame.init()
-    display = pygame.display.set_mode((800, 600))
+    window = pygame.display.set_mode((800, 600))
     pygame.display.set_caption("ma boi")
     clock = pygame.time.Clock()
 
-    boy = Player(10, 0, 0)
+    boy = Player(20, 0, 0)
     RS = RedSquare(0, 500)
+    rs2 = RedSquare(150, 300, 50, 50)
 
     key_pressed = {pygame.K_UP: False, pygame.K_DOWN: False,
                    pygame.K_RIGHT: False, pygame.K_LEFT: False}
@@ -35,12 +36,13 @@ if __name__ == "__main__":
             if event.type == pygame.KEYUP:
                 key_pressed[int(event.key)] = False
 
-        boy.move(key_pressed)
-        pygame.draw.rect(display, (0, 0, 0), (0, 0, 800, 600))
-        RS.displayRS(display)
-        boy.displayPlayer(display)
-        print(Collision.checkOverlap(boy, RS))
-        clock.tick(60)
+        boy.move(key_pressed, obj=[RS, rs2])
+        pygame.draw.rect(window, (0, 0, 0), (0, 0, 800, 600))
+        RS.display(window)
+        boy.display(window)
+        rs2.display(window)
+        print(Collision.check_overlap(boy, RS))
+        clock.tick(120)
         pygame.display.flip()
     pygame.quit()
     quit()
