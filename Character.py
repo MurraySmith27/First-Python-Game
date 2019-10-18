@@ -10,29 +10,15 @@ class Character(GameObject):
         self._speed = speed
 
     def collides(self, obj: List[int]):
-        return self.x_collides(obj) and self.y_collides(obj)
+        x, y, w, h = obj
+        x_collides = self._x + self._width > x and self._x < x + w
+        y_collides = self._y + self._height > y and self._y < y + h
+        return x_collides and y_collides
 
     def x_collides(self, obj: List[int]):
         x, y, w, h = obj
         x_collides = self._x + self._width > x and self._x < x + w
         return x_collides
-
-    def y_collides(self, obj: List[int]):
-        x, y, w, h = obj
-        y_collides = self._y + self._height > y and self._y < y + h
-        return y_collides
-
-    # def above(self, obj: List[int]):
-    #     return self._y + self._height < obj[1]
-    #
-    # def below(self, obj: List[int]):
-    #     return self._y > obj[1] + obj[3]
-    #
-    # def to_right(self, obj: List[int]):
-    #     return self._x > obj[0] + obj[2]
-    #
-    # def to_left(self, obj: List[int]):
-    #     return self._x + self._width < obj[0]
 
     def move(self, keys_pressed):
         raise NotImplementedError
