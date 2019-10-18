@@ -12,15 +12,17 @@ class Player(Character):
     _t: float
     _y0: float
     _yprev: float
+    _standing_on: GameObject
 
     def __init__(self, speed: float, x: int = 0, y: int = 0):
         super().__init__(speed, x, y)
         self._image_index = pygame.image.load(
             "images/boy_stand_right.png").convert_alpha()
-        self._v0 = 70
+        self._v0 = 100
         self._y0 = y
         self._yprev = y
         self._t = self._v0 / (2 * 0.5 * G)
+        self._standing_on = None
 
     def display(self, game_display):
         """ Displays the player onto the game display
@@ -38,27 +40,39 @@ class Player(Character):
             self._t = .5
             self._y0 = self._y
 
+        x_prev = self._x
         self._x += x_inc
         self._yprev = self._y
-        self._y = int(self._y0 - self._v0 * self._t + 0.5 * G * self._t * self._t)
+        self._y = self._gravity()
 
         if self._t != 0:
             self._t += .5
 
         for i in obj:
             hitbox = i.hitbox()
-
-            if keys_pressed[pygame.K_RIGHT] and self.collides(hitbox):
-                self._x = self._width - hitbox[0]
-            elif keys_pressed[pygame.K_LEFT] and self.collides(hitbox):
-                self._x = hitbox[0]
-
-            if self.collides(hitbox) and not( hitbox[1] < self._yprev + self._height and self._yprev > hitbox[1] + hitbox[3]):
-                if self._y > self._yprev and self._yprev < hitbox[1]:
+            if self.collides(hitbox):
+                x_prev_between = x_prev + self._width > hitbox[0] and x_prev < hitbox[0] + hitbox[2]
+                case_b = self._y + self._height > hitbox[1] >= self._yprev + self._height
+                case_c = self._y < hitbox[1] + hitbox[3] <= self._yprev
+                if x_prev_between and case_b:
                     self._y = hitbox[1] - self._height
                     self._y0 = self._y
                     self._t = 0
-                elif self._y < self._yprev and self._yprev > hitbox[1]:
+                    self._standing_on = i
+                elif x_prev_between and case_c:
                     self._y = hitbox[1] + hitbox[3]
-                    self._t += (2 * (self._v0 / G) - self._t)
+                    self._t += (2 * (self._v0 / G) - self._t) - 0.5
+                elif x_prev + self._width <= hitbox[0]:
+                    self._x = hitbox[0] - self._width
+                elif x_prev >= hitbox[0] + hitbox[2]:
+                    self._x = hitbox[0] + hitbox[2]
 
+            elif self._standing_on is i and not self.x_collides(hitbox) and self._t == 0:
+                self._t = self._v0 / G
+                self._y0 = 2 * self._y - self._gravity()
+                self._standing_on = None
+
+    def _gravity(self, t: float = -1):
+        if t == -1:
+            t = self._t
+        return int(self._y0 - self._v0 * t + 0.5 * G * t * t)
