@@ -1,7 +1,6 @@
 import pygame
 from Characters.Player import Player
 from Characters.RedSquare import RedSquare
-import Collision
 
 
 dead: bool
@@ -41,7 +40,6 @@ if __name__ == "__main__":
         RS.display(window)
         boy.display(window)
         rs2.display(window)
-        print(Collision.check_overlap(boy, RS))
         clock.tick(120)
         pygame.display.flip()
     pygame.quit()
