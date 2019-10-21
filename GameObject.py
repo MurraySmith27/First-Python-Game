@@ -15,3 +15,16 @@ class GameObject:
 
     def hitbox(self) -> List[int]:
         raise NotImplementedError
+
+    # added getter and setter functions - Eric
+    def get_x(self):
+        return self._x
+
+    def get_y(self):
+        return self._y
+
+    def get_width(self):
+        return self._width
+
+    def get_height(self):
+        return self._height
