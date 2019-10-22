@@ -38,7 +38,7 @@ class Player(Character):
             x_inc += self._speed
         # movement along the y axis, with gravity
         if keys_pressed[pygame.K_UP] and self._t == 0:
-            self._t = .5
+            self._t = 1
             self._y0 = self._y
 
         # update the position of the player according to change in position
@@ -48,7 +48,7 @@ class Player(Character):
         self._y = self._gravity()
 
         if self._t != 0:
-            self._t += .5
+            self._t += 1
 
         # collision
         for i in obj:
@@ -69,7 +69,7 @@ class Player(Character):
                 # player colliding with the bottom of the game object
                 elif x_prev_between and case_c:
                     self._y = hitbox[1] + hitbox[3]
-                    self._t += (2 * (self._v0 / G) - self._t) - 0.5
+                    self._t += (2 * (self._v0 / G) - self._t)
 
                 # collision by the sides
                 elif x_prev + self._width <= hitbox[0]:

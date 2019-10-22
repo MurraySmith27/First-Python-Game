@@ -36,11 +36,11 @@ if __name__ == "__main__":
                 key_pressed[int(event.key)] = False
 
         boy.move(key_pressed, obj=[RS, rs2])
-        pygame.draw.rect(window, (0, 0, 0), (0, 0, 800, 600))
+        pygame.draw.rect(window, (255, 255, 255), (0, 0, 800, 600))
         RS.display(window)
         boy.display(window)
         rs2.display(window)
-        clock.tick(120)
+        clock.tick(60)
         pygame.display.flip()
     pygame.quit()
     quit()
