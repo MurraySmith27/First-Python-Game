@@ -1,31 +1,22 @@
 import pygame
-from Character import Character
+from GameObject import GameObject
+from typing import List
 
 
-class RedSquare(Character):
-
+class RedSquare(GameObject):
     _image_index: int
     _x: int
     _y: int
-    _width: int = 800
-    _height: int = 100
-    def __init__(self, x: int = 0,  y: int = 0):
+    _width: int
+    _height: int
 
-        self._x = x
-        self._y = y
+    def __init__(self, x: int = 0, y: int = 0, w: int = 800, h: int = 100):
+        GameObject.__init__(self, x, y, w, h)
 
-    def displayRS(self, game_display):
-        pygame.draw.rect(game_display, (255, 0, 0, 255), (0, 500, 800, 100))
+    def display(self, game_display):
+        pygame.draw.rect(game_display,
+                         (255, 0, 0, 255),
+                         (self._x, self._y, self._width, self._height))
 
-    def getX(self):
-        x = self._x
-        return x
-    def getY(self):
-        y = self._y
-        return y
-    def getWidth(self):
-        Width = self._width
-        return Width
-    def getHeight(self):
-        Height = self._height
-        return Height
+    def hitbox(self) -> List[int]:
+        return [self._x, self._y, self._width, self._height]
