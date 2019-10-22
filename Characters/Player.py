@@ -11,6 +11,7 @@ class Player(Character):
     _y: int
     _width: int = 60
     _height: int = 80
+
     def __init__(self, speed: float, x: int = 0,  y: int = 0):
         self._image_index = pygame.image.load("images/boy_stand_right.png").convert_alpha()
 
