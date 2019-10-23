@@ -14,7 +14,7 @@ class Player(Character):
     _yprev: float
     _standing_on: GameObject
 
-    def __init__(self, speed: float, x: int = 0,  y: int = 0):
+    def __init__(self, speed: float, x: int = 0, y: int = 0):
         super().__init__(speed, x, y)
         self._image_index = pygame.image.load("images/boy_stand_right.png").convert_alpha()
         self._v0 = 100
@@ -89,4 +89,3 @@ class Player(Character):
         if t == -1:
             t = self._t
         return int(self._y0 - self._v0 * t + 0.5 * G * t * t)
-

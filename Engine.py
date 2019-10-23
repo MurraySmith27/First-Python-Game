@@ -6,8 +6,6 @@ from Watergun import Watergun
 dead: bool
 boy: Player
 gun: Watergun
-# what is this for? -Eric
-move_boy: bool
 if __name__ == "__main__":
     pygame.init()
     window = pygame.display.set_mode((800, 600))
@@ -42,7 +40,8 @@ if __name__ == "__main__":
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 gun_fired = True
-                #bullet travels from Player to mouse position
+
+                # bullet travels from Player to mouse position
                 gun.calc_proj(boy, pygame.mouse.get_pos())
 
         boy.move(key_pressed, obj=[RS, rs2])
