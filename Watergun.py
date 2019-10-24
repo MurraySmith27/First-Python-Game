@@ -9,21 +9,23 @@ class Watergun(GameObject):
     speed: int
     radius: int
 
-    def __int__(self, x: int, y: int, speed: int, radius: int):
-        #hitbox contained within circle
+    def __init__(self, x: int, y: int, speed: int, radius: int):
+        # hitbox contained within circle
         super().__init__(x, y, radius * 2, radius * 2)
         self.speed = speed
         self.radius = radius
+        self.bx_dist = 0
+        self.by_dist = 0
 
     def display(self, game_display, gun_fired):
         if gun_fired:
-            #bullet is visible
+            # bullet is visible
             pygame.draw.circle(game_display, self.WHITE, (int(self._x), int(self._y)), self.radius)
         else:
-            #bullet no visible
+            # bullet no visible
             pygame.draw.circle(game_display, self.BLACK, (int(self._x), int(self._y)), self.radius)
 
-    #gets bullet direction
+    # gets bullet direction
     def calc_proj(self, boy: GameObject, mouse_pos: tuple):
         x1 = boy.get_x()
         y1 = boy.get_y()
@@ -36,7 +38,7 @@ class Watergun(GameObject):
         self.bx_dist = (bx_dist / b_length) * self.speed
         self.by_dist = (by_dist / b_length) * self.speed
 
-    #moves bullet
+    # moves bullet
     def fire(self):
-        self.x += self.bx_dist
-        self.y += self.by_dist
+        self._x += self.bx_dist
+        self._y += self.by_dist
