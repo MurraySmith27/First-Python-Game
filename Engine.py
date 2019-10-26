@@ -1,7 +1,6 @@
 import pygame
-from Characters.Player import Player
-from Characters.RedSquare import RedSquare
-
+from GameObjects import RedSquare
+from Characters import Player
 
 dead: bool
 boy: Player
@@ -16,6 +15,7 @@ if __name__ == "__main__":
     RS = RedSquare(0, 500)
     rs2 = RedSquare(150, 300, 200, 50)
     rs3 = RedSquare(150, 100, 50, 200)
+
     key_pressed = {pygame.K_UP: False, pygame.K_DOWN: False,
                    pygame.K_RIGHT: False, pygame.K_LEFT: False}
 
@@ -35,8 +35,14 @@ if __name__ == "__main__":
             if event.type == pygame.KEYUP:
                 key_pressed[int(event.key)] = False
 
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+            #     boy.watergun.fire()
+            #
+            # if event.type == pygame.MOUSEBUTTONUP:
+            #     boy.watergun.fired = False
+
         boy.move(key_pressed, obj=[RS, rs2, rs3])
-        pygame.draw.rect(window, (255, 255, 255), (0, 0, 800, 600))
+        pygame.draw.rect(window, (0, 0, 0), (0, 0, 800, 600))
         RS.display(window)
         boy.display(window)
         rs2.display(window)
