@@ -90,7 +90,7 @@ class Watergun(GameObject):
         self.fired = False
 
     def display(self, game_display):
-        pygame.draw.circle(game_display, WHITE, (self._x, self._y), self.radius)
+        # pygame.draw.circle(game_display, WHITE, (self._x, self._y), self.radius)
         for bullet in self.bullets:
             bullet.display(game_display)
 

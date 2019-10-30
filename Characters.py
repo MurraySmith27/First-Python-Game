@@ -37,7 +37,7 @@ class Player(_Character):
 
     def __init__(self, speed: float, x: int = 0, y: int = 0):
         super().__init__(speed, x, y)
-        self._image = pygame.image.load("images/boy_stand_right.png")
+        self._image = pygame.image.load("assets/boy_stand_right.png")
         self._image_index = self._image.convert_alpha()
         self._v0 = 100
         self._y0 = y
