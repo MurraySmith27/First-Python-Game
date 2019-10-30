@@ -36,6 +36,7 @@ class GameObject:
     def hit_by_bullet(self):
         raise NotImplementedError
 
+
 class RedSquare(GameObject):
     _image_index: int
     _x: int
@@ -46,11 +47,30 @@ class RedSquare(GameObject):
     def __init__(self, x: int = 0, y: int = 0, w: int = 800, h: int = 100):
         GameObject.__init__(self, x, y, w, h)
 
-
     def display(self, game_display):
         pygame.draw.rect(game_display,
                          (255, 0, 0, 255),
                          (self._x, self._y, self._width, self._height))
+
+    def hit_by_bullet(self):
+        return
+
+
+class Border:
+
+    _window_width: int
+    _window_height: int
+    top_border: GameObject
+    bottom_border: GameObject
+    right_border: GameObject
+    left_border: GameObject
+
+    def __init__(self, window_width, window_height):
+        pass
+
+    def collides(self, obj: List[int]):
+        return self.top_border.collides(obj) or self.bottom_border.collides(obj) \
+               or self.right_border.collides(obj) or self.left_border.collides(obj)
 
 
 class Bullet(GameObject):
@@ -100,14 +120,15 @@ class Watergun(GameObject):
         - Check if any of the bullets are colliding with any of the GameObjects (use GameObject.collides())
         - If bullet hits any GameObject, call GameObject.hit_by_bullet() and remove the bullet from the list
         """
-
-        for bullet in self.bullets:
+        i_offset = 0
+        for bullet_index in range(len(self.bullets)):
+            bullet = self.bullets[bullet_index - i_offset]
             bullet.update()
-            #The implementation of collides in the if statement below doesnt work and i dont know why, so i've
-            # commented out the code below
-            #if RedSquare.collides(self, bullet.hitbox()):
-                #RedSquare.hit_by_bullet(self)
-                #self.bullets.remove(bullet)
+            for object_ in obj:
+                if bullet.collides(object_.hitbox()):
+                    object_.hit_by_bullet()
+                    self.bullets.pop(bullet_index - i_offset)
+                    i_offset += 1
 
     def fire(self):
         if not self.fired and self.direction == "right":

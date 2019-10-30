@@ -41,10 +41,8 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEBUTTONUP:
                 boy.watergun.fired = False
 
-
         boy.move(key_pressed, obj=[RS, rs2, rs3])
         pygame.draw.rect(window, (0, 0, 0), (0, 0, 800, 600))
-        boy.watergun.update()
         RS.display(window)
         boy.display(window)
         rs2.display(window)

@@ -108,6 +108,7 @@ class Player(_Character):
                 self._standing_on = None
 
         self.watergun.move(self._x+60, self._y + 40)
+        self.watergun.update(obj)
 
     def _gravity(self, t: float = -1):
         """calculates the new position of the player after <t> units has passed
