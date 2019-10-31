@@ -31,13 +31,14 @@ class Player(_Character):
     _v0: float
     _t: float
     _y0: float
+    _xprev: float
     _yprev: float
     _standing_on: GameObject
     watergun: Watergun
 
     def __init__(self, speed: float, x: int = 0, y: int = 0):
         super().__init__(speed, x, y)
-        self._image = pygame.image.load("images/boy_stand_right.png")
+        self._image = pygame.image.load("assets/boy_stand_right.png")
         self._image_index = self._image.convert_alpha()
         self._v0 = 100
         self._y0 = y
@@ -45,6 +46,7 @@ class Player(_Character):
         self._t = self._v0 / (2 * 0.5 * G)
         self.watergun = Watergun(self._x + self._image.get_rect().w, (self._y + self._image.get_rect().w) // 2, 10, 10)
         self._standing_on = None
+        self._xprev = self._x
 
     def display(self, game_display):
         """ Displays the player onto the game display
@@ -57,8 +59,10 @@ class Player(_Character):
         # movement along the x axis
         x_inc = 0
         if keys_pressed[pygame.K_LEFT]:
+            '''change the self.direction for bullet implementation'''
             x_inc += -self._speed
         if keys_pressed[pygame.K_RIGHT]:
+            '''change the self.direction for bullet implementation'''
             x_inc += self._speed
         # movement along the y axis, with gravity
         if keys_pressed[pygame.K_UP] and self._t == 0:
@@ -66,7 +70,7 @@ class Player(_Character):
             self._y0 = self._y
 
         # update the position of the player according to change in position
-        x_prev = self._x
+        self._xprev = self._x
         self._x += x_inc
         self._yprev = self._y
         self._y = self._gravity()
@@ -79,7 +83,7 @@ class Player(_Character):
             hitbox = i.hitbox()
             if self.collides(hitbox):
 
-                x_prev_between = x_prev + self._width > hitbox[0] and x_prev < hitbox[0] + hitbox[2]
+                x_prev_between = self._xprev + self._width > hitbox[0] and self._xprev < hitbox[0] + hitbox[2]
                 case_b = self._y + self._height > hitbox[1] >= self._yprev + self._height
                 case_c = self._y < hitbox[1] + hitbox[3] <= self._yprev
 
@@ -96,9 +100,9 @@ class Player(_Character):
                     self._t += (2 * (self._v0 / G) - self._t)
 
                 # collision by the sides
-                elif x_prev + self._width <= hitbox[0]:
+                elif self._xprev + self._width <= hitbox[0]:
                     self._x = hitbox[0] - self._width
-                elif x_prev >= hitbox[0] + hitbox[2]:
+                elif self._xprev >= hitbox[0] + hitbox[2]:
                     self._x = hitbox[0] + hitbox[2]
 
             # to check if player falls of the game object it was standing on
@@ -107,7 +111,14 @@ class Player(_Character):
                 self._y0 = 2 * self._y - self._gravity()
                 self._standing_on = None
 
-        self.watergun.move(self._x+60, self._y + 40)
+            else:
+                '''
+                If i + i._width is between prev position of the player and current position of the 
+                player 
+                '''
+                pass
+
+        self.watergun.move(self._x + 60, self._y + 40)
         self.watergun.update(obj)
 
     def _gravity(self, t: float = -1):

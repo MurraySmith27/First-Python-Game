@@ -1,5 +1,5 @@
 import pygame
-from typing import List
+from typing import List, Union, Tuple
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -26,6 +26,18 @@ class GameObject:
         x, y, w, h = obj
         x_collides = self._x + self._width > x and self._x < x + w
         return x_collides
+
+    def scale(self, scale: Union[float, Tuple[float, float]]) -> None:
+        if isinstance(scale, float):
+            self._x *= scale
+            self._width *= scale
+            self._y *= scale
+            self._height *= scale
+        else:
+            self._x *= scale[0]
+            self._width *= scale[0]
+            self._y *= scale[1]
+            self._height *= scale[1]
 
     def hitbox(self) -> List[int]:
         return [self._x, self._y, self._width, self._height]
@@ -57,6 +69,11 @@ class RedSquare(GameObject):
 
 
 class Border:
+    """
+        a class that contains 4 game objects just outside the frame so that nothing goes outside of the
+        frame
+        Note: we might not need this class depending on what Darren has done for us
+    """
 
     _window_width: int
     _window_height: int
@@ -66,6 +83,7 @@ class Border:
     left_border: GameObject
 
     def __init__(self, window_width, window_height):
+        """IMPLEMENT!!!"""
         pass
 
     def collides(self, obj: List[int]):
@@ -110,7 +128,7 @@ class Watergun(GameObject):
         self.fired = False
 
     def display(self, game_display):
-        pygame.draw.circle(game_display, WHITE, (self._x, self._y), self.radius)
+        # pygame.draw.circle(game_display, WHITE, (self._x, self._y), self.radius)
         for bullet in self.bullets:
             bullet.display(game_display)
 
