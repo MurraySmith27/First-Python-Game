@@ -15,7 +15,8 @@ if __name__ == "__main__":
 
     boy = Player(BOY_SPEED, 100, 300)
 
-    map_image, mapGOs = MakeMap("assets/maps/map1.csv", "assets/platformer-extendedtiles-0/PNG Grass/Spritesheet/sheet.png", 70, 7)
+    map_image, mapGOs =\
+        MakeMap("assets/maps/map1.csv", "assets/platformer-extendedtiles-0/PNG Grass/Spritesheet/sheet.png", 70, 7)
     # Process GO size. This needs to change.
     for i in range(len(mapGOs)):
         mapGOs[i].scale((FRAME_WIDTH / map_image.get_width(),
@@ -51,7 +52,6 @@ if __name__ == "__main__":
         bg = pygame.image.load(BACKGROUND_PATH).convert_alpha()
         window.blit(bg, (0,0))
         window.blit(map_image, (0, 0))
-        boy.watergun.update()
         boy.display(window)
         clock.tick(60)
         pygame.display.flip()
