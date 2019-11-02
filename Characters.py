@@ -110,7 +110,19 @@ class Player(_Character):
                 If i + i._width is between prev position of the player and current position of the 
                 player 
                 '''
-                pass
+                if self._movement_overshoot_x(hitbox) and hitbox[0] < self._xprev:
+                    self._x = hitbox[0] + hitbox[1]
+                elif self._movement_overshoot_x(hitbox) and hitbox[0] > self._xprev:
+                    self._x = hitbox[0] - self._width
+
+                if self._movement_overshoot_y(hitbox) and hitbox[1] < self._yprev:
+                    self._y = hitbox[1] + hitbox[3]
+                    self._t += (2 * (self._v0 / G) - self._t)
+                elif self._movement_overshoot_y(hitbox) and hitbox[1] > self._xprev:
+                    self._y = hitbox[1] - self._height
+                    self._y0 = self._y
+                    self._t = 0
+                    self._standing_on = i
 
             # to check if player falls of the game object it was standing on
             elif self._standing_on is i and not self.x_collides(hitbox) and self._t == 0:
