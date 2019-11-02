@@ -13,7 +13,7 @@ if __name__ == "__main__":
     pygame.display.set_caption("ma boi")
     clock = pygame.time.Clock()
 
-    boy = Player(20, 100, 300)
+    boy = Player(BOY_SPEED, 100, 300)
 
     map_image, mapGOs = MakeMap("assets/maps/map1.csv", "assets/platformer-extendedtiles-0/PNG Grass/Spritesheet/sheet.png", 70, 7)
     # Process GO size. This needs to change.
@@ -48,7 +48,8 @@ if __name__ == "__main__":
                 boy.watergun.fired = False
 
         boy.move(key_pressed, obj=mapGOs)
-        pygame.draw.rect(window, (0, 0, 0), (0, 0, 800, 600))
+        bg = pygame.image.load(BACKGROUND_PATH).convert_alpha()
+        window.blit(bg, (0,0))
         window.blit(map_image, (0, 0))
         boy.watergun.update()
         boy.display(window)

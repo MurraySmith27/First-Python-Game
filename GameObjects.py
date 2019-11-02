@@ -46,7 +46,9 @@ class GameObject:
         raise NotImplementedError
 
     def hit_by_bullet(self):
-        raise NotImplementedError
+        # Need to implement
+        # raise NotImplementedError
+        return
 
 
 class RedSquare(GameObject):
@@ -138,15 +140,13 @@ class Watergun(GameObject):
         - Check if any of the bullets are colliding with any of the GameObjects (use GameObject.collides())
         - If bullet hits any GameObject, call GameObject.hit_by_bullet() and remove the bullet from the list
         """
-        i_offset = 0
-        for bullet_index in range(len(self.bullets)):
-            bullet = self.bullets[bullet_index - i_offset]
+        for bullet in self.bullets:
             bullet.update()
             for object_ in obj:
                 if bullet.collides(object_.hitbox()):
                     object_.hit_by_bullet()
-                    self.bullets.pop(bullet_index - i_offset)
-                    i_offset += 1
+                    if bullet in self.bullets:
+                        self.bullets.remove(bullet)
 
     def fire(self):
         if not self.fired and self.direction == "right":

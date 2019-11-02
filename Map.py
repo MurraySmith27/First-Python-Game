@@ -26,8 +26,12 @@ def MakeMap(map_csv_name, map_spritsheet_name, tile_size, tiles_per_row):
                 continue
             spr_x = tile_size * (tile_id % tiles_per_row)
             spr_y = tile_size * math.floor(tile_id / tiles_per_row)
+            #set all black pixels on the map_image to transparent when blitting
+            map_image.set_colorkey((0,0,0))
             map_image.blit(map_spritesheet, map_pixel_pos, (spr_x, spr_y, tile_size, tile_size))
             go = GameObject(map_pixel_pos[0], map_pixel_pos[1], tile_size, tile_size)
             gameObjects.append(go)
+
+
 
     return map_image, gameObjects
