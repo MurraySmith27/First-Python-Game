@@ -39,10 +39,16 @@ class Player(_Character):
     _yprev: float
     _standing_on: GameObject
     watergun: Watergun
+    sprite_walk: List[object]
+    walk_count: int
 
     def __init__(self, speed: float, x: int = 0, y: int = 0):
         super().__init__(speed, x, y)
-        self._image = pygame.image.load("assets/boy_stand_right.png")
+        self.sprite_walk = [pygame.image.load("assets/sprites/standing.png"),
+                            pygame.image.load("assets/sprites/walk_1.png"),
+                            pygame.image.load("assets/sprites/walk_2.png"),
+                            pygame.image.load("assets/sprites/walk_3.png")]
+        self._image = self.sprite_walk[0]
         self._image_index = self._image.convert_alpha()
         self._v0 = 100
         self._y0 = y
@@ -51,12 +57,25 @@ class Player(_Character):
         self.watergun = Watergun(self._x + self._image.get_rect().w, (self._y + self._image.get_rect().w) // 2, 10, 10)
         self._standing_on = None
         self._xprev = self._x
+        self.walk_count = 0
 
     def display(self, game_display):
         """ Displays the player onto the game display
         """
         game_display.blit(self._image_index, (self._x, self._y))
         self.watergun.display(game_display)
+
+    def animate_character(self, move: str):
+        if move == "WALK":
+            if self.walk_count + 1 >= 12:
+                self.walk_count = 0
+            self._image = self.sprite_walk[self.walk_count // 3]
+            self.walk_count += 1
+        elif move == "JUMP":
+            self._image = pygame.image.load("assets/sprites/jump.png")
+        elif move == "STANDING":
+            self._image = self.sprite_walk[0]
+        self._image_index = self._image.convert_alpha()
 
     def move(self, keys_pressed: Dict[int, bool], gravity: bool = True, obj: List[GameObject] = []):
 
@@ -65,13 +84,17 @@ class Player(_Character):
         if keys_pressed[pygame.K_LEFT]:
             '''change the self.direction for bullet implementation'''
             x_inc += -self._speed
-        if keys_pressed[pygame.K_RIGHT]:
+            self.animate_character("WALK")
+        elif keys_pressed[pygame.K_RIGHT]:
             '''change the self.direction for bullet implementation'''
             x_inc += self._speed
+            self.animate_character("WALK")
         # movement along the y axis, with gravity
-        if keys_pressed[pygame.K_UP] and self._t == 0:
+        elif keys_pressed[pygame.K_UP] and self._t == 0:
             self._t = 1
             self._y0 = self._y
+        else:
+            self.animate_character("STANDING")
 
         # update the position of the player according to change in position
         self._xprev = self._x
@@ -81,6 +104,7 @@ class Player(_Character):
 
         if self._t != 0:
             self._t += 1
+            self.animate_character("JUMP")
 
         # collision
         for i in obj:
