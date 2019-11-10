@@ -25,6 +25,10 @@ class _Character(GameObject):
     def hit_by_bullet(self):
         raise NotImplementedError
 
+    @property
+    def speed(self):
+        return self._speed
+
 
 class Player(_Character):
     _image_index: int
@@ -94,10 +98,10 @@ class Player(_Character):
                     self._t = 0
                     self._standing_on = i
 
-                # player colliding with the bottom of the game object
+                # player colliding with the bottom/ of the game object
                 elif x_prev_between and case_c:
                     self._y = hitbox[1] + hitbox[3]
-                    self._t += (2 * (self._v0 / G) - self._t)
+                    self._t = (2 * (self._v0 / G))
 
                 # collision by the sides
                 elif self._xprev + self._width <= hitbox[0]:
@@ -105,21 +109,35 @@ class Player(_Character):
                 elif self._xprev >= hitbox[0] + hitbox[2]:
                     self._x = hitbox[0] + hitbox[2]
 
+            # to check if player falls off the game object it was standing on
+            elif self._movement_overshoot(hitbox):
+                '''
+                If i + i._width is between prev position of the player and current position of the 
+                player 
+                '''
+                pass
             # to check if player falls of the game object it was standing on
             elif self._standing_on is i and not self.x_collides(hitbox) and self._t == 0:
                 self._t = self._v0 / G
                 self._y0 = 2 * self._y - self._gravity()
                 self._standing_on = None
 
-            else:
-                '''
-                If i + i._width is between prev position of the player and current position of the 
-                player 
-                '''
-                pass
-
         self.watergun.move(self._x + 60, self._y + 40)
         self.watergun.update(obj)
+
+    def _movement_overshoot(self, obj_hitbox: List[int]) -> bool:
+
+        return self._movement_overshoot_x(obj_hitbox) or self._movement_overshoot_y(obj_hitbox)
+
+    def _movement_overshoot_x(self, obj_hitbox: List[int]) -> bool:
+        x_collides = self._xprev + self._width < obj_hitbox[0] and obj_hitbox[0] + obj_hitbox[2] < self._x
+        x_collides = x_collides or self._xprev > obj_hitbox[0] + obj_hitbox[2] and self._x < obj_hitbox[0]
+        return x_collides
+
+    def _movement_overshoot_y(self, obj_hitbox: List[int]) -> bool:
+        y_collides = self._yprev + self._height < obj_hitbox[1] and obj_hitbox[1] + obj_hitbox[3] < self._y
+        y_collides = y_collides or self._yprev > obj_hitbox[1] + obj_hitbox[3] and self._y < obj_hitbox[3]
+        return y_collides
 
     def _gravity(self, t: float = -1):
         """calculates the new position of the player after <t> units has passed
@@ -133,3 +151,7 @@ class Player(_Character):
         Decrease the health of the player
         """
         pass
+
+    @property
+    def x(self):
+        return self._x
