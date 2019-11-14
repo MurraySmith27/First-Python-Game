@@ -13,7 +13,7 @@ class _Character(GameObject):
 
     def __init__(self, speed: float, x: int = 0, y: int = 0):
         """add health attribute here"""
-        super().__init__(x, y, 60, 80)
+        super().__init__(x, y, 72, 87)
         self._speed = speed
 
     def move(self, keys_pressed):
@@ -81,7 +81,10 @@ class Player(_Character):
 
         # movement along the x axis
         x_inc = 0
-        if keys_pressed[pygame.K_LEFT]:
+        if keys_pressed[pygame.K_UP] and self._t == 0:
+            self._t = 1
+            self._y0 = self._y
+        elif keys_pressed[pygame.K_LEFT]:
             '''change the self.direction for bullet implementation'''
             x_inc += -self._speed
             self.animate_character("WALK")
@@ -90,9 +93,7 @@ class Player(_Character):
             x_inc += self._speed
             self.animate_character("WALK")
         # movement along the y axis, with gravity
-        elif keys_pressed[pygame.K_UP] and self._t == 0:
-            self._t = 1
-            self._y0 = self._y
+
         else:
             self.animate_character("STANDING")
 
@@ -104,7 +105,7 @@ class Player(_Character):
 
         if self._t != 0:
             self._t += 1
-            self.animate_character("JUMP")
+            #self.animate_character("JUMP")
 
         # collision
         for i in obj:
