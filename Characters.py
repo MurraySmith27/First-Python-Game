@@ -1,5 +1,8 @@
+import math
+
 import pygame
 from typing import List, Dict
+from math import *
 
 from pygame.rect import Rect
 
@@ -13,7 +16,7 @@ class _Character(GameObject):
 
     def __init__(self, speed: float, x: int = 0, y: int = 0):
         """add health attribute here"""
-        super().__init__(x, y, 72, 87)
+        super().__init__(x, y, 72, 100)
         self._speed = speed
 
     def move(self, keys_pressed):
@@ -47,7 +50,12 @@ class Player(_Character):
         self.sprite_walk = [pygame.image.load("assets/sprites/standing.png"),
                             pygame.image.load("assets/sprites/walk_1.png"),
                             pygame.image.load("assets/sprites/walk_2.png"),
-                            pygame.image.load("assets/sprites/walk_3.png")]
+                            pygame.image.load("assets/sprites/walk_3.png"),
+                            pygame.image.load("assets/sprites/walk_4.png"),
+                            pygame.image.load("assets/sprites/walk_5.png"),
+                            pygame.image.load("assets/sprites/walk_6.png"),
+                            pygame.image.load("assets/sprites/walk_7.png"),
+                            pygame.image.load("assets/sprites/walk_8.png")]
         self._image = self.sprite_walk[0]
         self._image_index = self._image.convert_alpha()
         self._v0 = 100
@@ -66,10 +74,15 @@ class Player(_Character):
         self.watergun.display(game_display)
 
     def animate_character(self, move: str):
-        if move == "WALK":
-            if self.walk_count + 1 >= 12:
+        if move == "RIGHTWALK":
+            if self.walk_count + 1 >= 33:
                 self.walk_count = 0
-            self._image = self.sprite_walk[self.walk_count // 3]
+            self._image = self.sprite_walk[math.ceil(self.walk_count / 4)]
+            self.walk_count += 1
+        elif move == "LEFTWALK":
+            if self.walk_count + 1 >= 33:
+                self.walk_count = 0
+            self._image = pygame.transform.flip(self.sprite_walk[math.ceil(self.walk_count / 4)], True, False)
             self.walk_count += 1
         elif move == "JUMP":
             self._image = pygame.image.load("assets/sprites/jump.png")
@@ -87,11 +100,12 @@ class Player(_Character):
         elif keys_pressed[pygame.K_LEFT]:
             '''change the self.direction for bullet implementation'''
             x_inc += -self._speed
-            self.animate_character("WALK")
+            self.animate_character("LEFTWALK")
+
         elif keys_pressed[pygame.K_RIGHT]:
             '''change the self.direction for bullet implementation'''
             x_inc += self._speed
-            self.animate_character("WALK")
+            self.animate_character("RIGHTWALK")
         # movement along the y axis, with gravity
 
         else:
